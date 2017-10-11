@@ -7,6 +7,16 @@ var mongoose = require('mongoose');
 
 var app = express();
 
+var seeder = require('mongoose-seeder'),
+  data = require('./data.json');
+
+seeder.seed(data).then(function (dbData) {
+  // The database objects are stored in dbData
+}).catch(function (err) {
+  // handle error
+  console.error(err);
+});
+
 mongoose.connect('mongodb://localhost:27017/dev');
 
 var db = mongoose.connection;
