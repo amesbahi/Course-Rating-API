@@ -5,23 +5,21 @@ var Course = require('./models');
 var Review = require('./models');
 var mid = require('../middleware');
 
-/****** USER ROUTES ******/
-
 // Return auth user
-router.get('/users', mid.requiresLogin, function (req, res, next) {
+router.get('/', mid.requiresLogin, function (req, res, next) {
     User.findById(req.session.userId)
         .exec(function (error, user) {
             if (error) {
                 return next(error)
             } else {
                 res.status(200);
-                return res.render('profile', { title: 'Profile', name: user.fullName });
+                return res.json('profile', { title: 'Profile', name: user.fullName });
             }
         });
 });
 
 // Create user
-router.post('/users', function (req, res, next) {
+router.post('/', function (req, res, next) {
     if (req.body.fullName &&
         req.body.emailAddress &&
         req.body.password) {

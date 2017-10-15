@@ -20,7 +20,7 @@ var UserSchema = new Schema({
 });
 
 var CourseSchema = new Schema({
-    user: UserSchema._id,
+    user: { type: Schema.Types.ObjectId, ref: 'User' },
     title: { type: String, required: true },
     description: { type: String, required: true },
     estimatedTime: { type: String },
@@ -44,7 +44,7 @@ var CourseSchema = new Schema({
 });
 
 var ReviewSchema = new Schema({
-    user: UserSchema._id,
+    user: { type: Schema.Types.ObjectId, ref: 'User' },
     postedOn: { type: Date, default: Date.now },
     rating: { type: Number, required: true, min: 1, max: 5 },
     review: { type: String }

@@ -4,6 +4,11 @@
 var express = require('express');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
+var userRoutes = require('../routes/users');
+var courseRoutes = require('../routes/courses');
+
+app.use('/users', userRoutes);
+app.use('/courses', courseRoutes);
 
 var app = express();
 
