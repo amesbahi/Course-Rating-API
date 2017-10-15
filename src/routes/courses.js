@@ -36,8 +36,9 @@ router.get('/:courseId', function (req, res, next) {
 // Create a course
 router.post('/', function (req, res, next) {
     var course = new Course(req.body);
-    course.save(function(err, course) {
+    course.save(function (err, course) {
         if (err) {
+            res.status(400);
             return next(err);
         } else {
             // set location header to '/', return no content
@@ -49,19 +50,25 @@ router.post('/', function (req, res, next) {
 });
 
 // Update a course
-router.put('/courses/:courseId', function(req, res, next) {
-    req.course.update(req.body, function(err, result) {
-        if (err) return next(err);
+router.put('/courses/:courseId', function (req, res, next) {
+    req.course.update(req.body, function (err, result) {
+        if (err) {
+            res.status(400);
+            return next(err);
+        }
         res.status(204);
         return res.json(result);
     });
 });
 
 // Create a review for a specific course
-router.post('/:courseId/reviews', function(req, res, next) {
+router.post('/:courseId/reviews', function (req, res, next) {
     req.course.reviews.push(req.body);
-    req.course.save(function(err, course) {
-        if (err) return next(err);
+    req.course.save(function (err, course) {
+        if (err) {
+            res.status(400);
+            return next(err);
+        }
         res.location('/:courseId');
         res.status(201);
         res.json(course);

@@ -34,6 +34,7 @@ router.post('/', function (req, res, next) {
         // schema's 'create' method to insert document into Mongo
         User.create(userData, function (error, user) {
             if (error) {
+                res.status(400);
                 return next(error);
             } else {
                 req.session.userId = user._id;
