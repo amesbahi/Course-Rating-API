@@ -5,13 +5,10 @@ var express = require('express');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
-var userRoutes = require('../routes/users');
-var courseRoutes = require('../routes/courses');
+var userRoutes = require('./routes/users');
+var courseRoutes = require('./routes/courses');
 
 var app = express();
-
-app.use('/users', userRoutes);
-app.use('/courses', courseRoutes);
 
 // parse incoming requests
 app.use(bodyParser.json());
@@ -47,6 +44,9 @@ app.use(morgan('dev'));
 
 // setup our static route to serve files from the "public" folder
 app.use('/', express.static('public'));
+
+app.use('/users', userRoutes);
+app.use('/courses', courseRoutes);
 
 // catch 404 and forward to global error handler
 app.use(function (req, res, next) {

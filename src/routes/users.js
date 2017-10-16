@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var User = require('./models');
-var Course = require('./models');
-var Review = require('./models');
-var mid = require('../middleware');
+var User = require('../models');
+var Course = require('../models');
+var Review = require('../models');
+var mid = require('../middleware/index');
 
 // Return auth user
 router.get('/', mid.userAuth, function (req, res, next) {
