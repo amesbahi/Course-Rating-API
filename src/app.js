@@ -4,13 +4,18 @@
 var express = require('express');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
 var userRoutes = require('../routes/users');
 var courseRoutes = require('../routes/courses');
+
+var app = express();
 
 app.use('/users', userRoutes);
 app.use('/courses', courseRoutes);
 
-var app = express();
+// parse incoming requests
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 var seeder = require('mongoose-seeder'),
   data = require('./data.json');

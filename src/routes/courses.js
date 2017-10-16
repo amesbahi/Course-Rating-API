@@ -34,7 +34,7 @@ router.get('/:courseId', function (req, res, next) {
 });
 
 // Create a course
-router.post('/', function (req, res, next) {
+router.post('/', mid.userAuth, function (req, res, next) {
     var course = new Course(req.body);
     course.save(function (err, course) {
         if (err) {
@@ -50,7 +50,7 @@ router.post('/', function (req, res, next) {
 });
 
 // Update a course
-router.put('/courses/:courseId', function (req, res, next) {
+router.put('/courses/:courseId', mid.userAuth, function (req, res, next) {
     req.course.update(req.body, function (err, result) {
         if (err) {
             res.status(400);
@@ -62,7 +62,7 @@ router.put('/courses/:courseId', function (req, res, next) {
 });
 
 // Create a review for a specific course
-router.post('/:courseId/reviews', function (req, res, next) {
+router.post('/:courseId/reviews', mid.userAuth, function (req, res, next) {
     req.course.reviews.push(req.body);
     req.course.save(function (err, course) {
         if (err) {

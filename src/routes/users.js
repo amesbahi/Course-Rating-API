@@ -6,7 +6,7 @@ var Review = require('./models');
 var mid = require('../middleware');
 
 // Return auth user
-router.get('/', mid.requiresLogin, function (req, res, next) {
+router.get('/', mid.userAuth, function (req, res, next) {
     User.findById(req.session.userId)
         .exec(function (error, user) {
             if (error) {
