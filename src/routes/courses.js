@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var User = require('./models');
-var Course = require('./models');
-var Review = require('./models');
-var mid = require('../middleware');
+var User = require('../models');
+var Course = require('../models');
+var Review = require('../models');
+var mid = require('../middleware/index');
 
 // Get courses
 router.get('/', function (req, res, next) {
@@ -74,3 +74,5 @@ router.post('/:courseId/reviews', mid.userAuth, function (req, res, next) {
         res.json(course);
     });
 });
+
+module.exports = router;

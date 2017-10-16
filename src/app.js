@@ -15,14 +15,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 var seeder = require('mongoose-seeder'),
-  data = require('./data.json');
-
-seeder.seed(data).then(function (dbData) {
-  // The database objects are stored in dbData
-}).catch(function (err) {
-  // handle error
-  console.error(err);
-});
+  data = require('./data/data.json');
 
 mongoose.connect('mongodb://localhost:27017/dev');
 
@@ -33,6 +26,12 @@ db.on('error', function (err) {
 });
 
 db.once("open", function () {
+  seeder.seed(data).then(function (dbData) {
+    // The database objects are stored in dbData
+  }).catch(function (err) {
+    // handle error
+    console.error(err);
+  });
   console.log(`db connection successful!`);
 });
 

@@ -10,14 +10,21 @@ var UserSchema = new Schema({
     emailAddress: {
         type: String, required: true, unique: true,
         validate: {
-            validator: function (emailAddress) {
+            validator: function (value) {
                 // check for correct email format
-                return /^[a-zA-Z0-9.!#$%&’*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(emailAddress)
+                return /^[a-zA-Z0-9.!#$%&’*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(value)
             },
-            message: `${emailAddress} is not a valid email address!`
+            message: `Please enter a valid email address!`
         }
     },
     password: { type: String, required: true }
+});
+
+var ReviewSchema = new Schema({
+    user: { type: Schema.Types.ObjectId, ref: 'User' },
+    postedOn: { type: Date, default: Date.now },
+    rating: { type: Number, required: true, min: 1, max: 5 },
+    review: { type: String }
 });
 
 var CourseSchema = new Schema({
@@ -41,14 +48,7 @@ var CourseSchema = new Schema({
             }
         }
     ],
-    reviews: [ReviewSchema._id]
-});
-
-var ReviewSchema = new Schema({
-    user: { type: Schema.Types.ObjectId, ref: 'User' },
-    postedOn: { type: Date, default: Date.now },
-    rating: { type: Number, required: true, min: 1, max: 5 },
-    review: { type: String }
+    reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }]
 });
 
 // authenticate user input against database documents
