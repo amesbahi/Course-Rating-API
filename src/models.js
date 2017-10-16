@@ -51,6 +51,27 @@ var ReviewSchema = new Schema({
     review: { type: String }
 });
 
+// authenticate user input against database documents
+UserSchema.statics.authenticate = function (email, password, callback) {
+    User.findOne({ email: email })
+        .exec(function (err, user) {
+            if (err) {
+                return callback(err);
+            } else if (!user) {
+                var error = new Error('User not found');
+                error.status = 401;
+                return callback(error);
+            }
+            bcrypt.compare(password, user.password, function (error, user) {
+                if (user) {
+                    return callback(null, user);
+                } else {
+                    return callback();
+                }
+            });
+        });
+}
+
 // hash password before saving to database
 UserSchema.pre('save', function (next) {
     var user = this;
