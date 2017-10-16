@@ -1,6 +1,7 @@
 'use strict';
 
 var mongoose = require('mongoose');
+var bcrypt = require('bcrypt');
 
 var Schema = mongoose.Schema;
 
@@ -48,6 +49,18 @@ var ReviewSchema = new Schema({
     postedOn: { type: Date, default: Date.now },
     rating: { type: Number, required: true, min: 1, max: 5 },
     review: { type: String }
+});
+
+// hash password before saving to database
+UserSchema.pre('save', function (next) {
+    var user = this;
+    bcrypt.hash(user.password, 10, function (err, hash) {
+        if (err) {
+            return next(err);
+        }
+        hash = user.password;
+        next();
+    });
 });
 
 var User = mongoose.model('User', UserSchema);
