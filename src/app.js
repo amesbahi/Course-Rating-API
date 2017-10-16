@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 var seeder = require('mongoose-seeder'),
   data = require('./data/data.json');
 
-mongoose.connect('mongodb://localhost:27017/dev');
+mongoose.connect('mongodb://localhost:27017/test');
 
 var db = mongoose.connection;
 
@@ -44,8 +44,8 @@ app.use(morgan('dev'));
 // setup our static route to serve files from the "public" folder
 app.use('/', express.static('public'));
 
-app.use('/users', userRoutes);
-app.use('/courses', courseRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/courses', courseRoutes);
 
 // catch 404 and forward to global error handler
 app.use(function (req, res, next) {

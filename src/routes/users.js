@@ -13,7 +13,7 @@ router.get('/', mid.userAuth, function (req, res, next) {
                 return next(error)
             } else {
                 res.status(200);
-                return res.json('profile', { title: 'Profile', name: user.fullName });
+                return res.json(user);
             }
         });
 });
@@ -41,7 +41,7 @@ router.post('/', function (req, res, next) {
                 // set location header to '/', return no content
                 res.location('/');
                 res.status(201);
-                return res.redirect('/profile');
+                return res.json(user);
             }
         });
 
