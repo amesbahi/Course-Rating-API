@@ -8,6 +8,10 @@ var bodyParser = require('body-parser');
 var userRoutes = require('./routes/users');
 var courseRoutes = require('./routes/courses');
 
+var User = require('./models/User');
+var Course = require('./models/Course');
+var Review = require('./models/Review');
+
 var app = express();
 
 // parse incoming requests
@@ -41,9 +45,6 @@ app.set('port', process.env.PORT || 5000);
 // morgan gives us http request logging
 app.use(morgan('dev'));
 
-// setup our static route to serve files from the "public" folder
-app.use('/', express.static('public'));
-
 app.use('/api/users', userRoutes);
 app.use('/api/courses', courseRoutes);
 
@@ -57,7 +58,7 @@ app.use(function (req, res, next) {
 // Express's global error handler
 app.use(function (err, req, res, next) {
   res.status(err.status || 500);
-  res.render('error', {
+  res.send({
     message: err.message,
     error: {}
   });

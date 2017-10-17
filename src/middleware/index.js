@@ -1,7 +1,7 @@
 'use strict'
 
 var auth = require('basic-auth');
-var User = require('../models');
+var User = require('../models/User');
 
 function userAuth(req, res, next) {
     var user = auth(req);

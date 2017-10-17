@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var User = require('../models');
-var Course = require('../models');
-var Review = require('../models');
+var User = require('../models/User');
+var Course = require('../models/Course');
+var Review = require('../models/Review');
 var mid = require('../middleware/index');
 
 // Get courses

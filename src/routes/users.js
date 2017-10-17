@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var User = require('../models');
-var Course = require('../models');
-var Review = require('../models');
+var User = require('../models/User');
+var Course = require('../models/Course');
+var Review = require('../models/Review');
 var mid = require('../middleware/index');
 
 // Return auth user
@@ -22,7 +22,14 @@ router.get('/', mid.userAuth, function (req, res, next) {
 router.post('/', function (req, res, next) {
     if (req.body.fullName &&
         req.body.emailAddress &&
-        req.body.password) {
+        req.body.password &&
+        req.body.confirmPassword) {
+
+        if (req.body.password != req.body.confirmPassword) {
+            var err = new Error('Passwords do not match!');
+            err.status = 400;
+            return next(err);
+        }
 
         // object with form input
         var userData = {
@@ -34,13 +41,14 @@ router.post('/', function (req, res, next) {
         // schema's 'create' method to insert document into Mongo
         User.create(userData, function (error, user) {
             if (error) {
-                res.status(400);
-                return next(error);
+                var err = new Error('Issue creating user - please try again.');
+                err.status(400);
+                return next(err);
             } else {
+                res.status(201);
                 req.session.userId = user._id;
                 // set location header to '/', return no content
                 res.location('/');
-                res.status(201);
                 return res.json(user);
             }
         });

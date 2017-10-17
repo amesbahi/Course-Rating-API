@@ -20,37 +20,6 @@ var UserSchema = new Schema({
     password: { type: String, required: true }
 });
 
-var ReviewSchema = new Schema({
-    user: { type: Schema.Types.ObjectId, ref: 'User' },
-    postedOn: { type: Date, default: Date.now },
-    rating: { type: Number, required: true, min: 1, max: 5 },
-    review: { type: String }
-});
-
-var CourseSchema = new Schema({
-    user: { type: Schema.Types.ObjectId, ref: 'User' },
-    title: { type: String, required: true },
-    description: { type: String, required: true },
-    estimatedTime: { type: String },
-    materialsNeeded: { type: String },
-    steps: [
-        {
-            stepNumber: {
-                type: Number
-            },
-            title: {
-                type: String,
-                required: true
-            },
-            description: {
-                type: String,
-                required: true
-            }
-        }
-    ],
-    reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }]
-});
-
 // authenticate user input against database documents
 UserSchema.statics.authenticate = function (email, password, callback) {
     User.findOne({ email: email })
@@ -85,9 +54,5 @@ UserSchema.pre('save', function (next) {
 });
 
 var User = mongoose.model('User', UserSchema);
-var Course = mongoose.model('Course', CourseSchema);
-var Review = mongoose.model('Review', ReviewSchema);
 
 module.exports.User = User;
-module.exports.Course = Course;
-module.exports.Review = Review;
