@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var User = require('../models/User');
-var Course = require('../models/Course');
-var Review = require('../models/Review');
+var User = require('../models/User').User;
+var Course = require('../models/Course').Course;
+var Review = require('../models/Review').Review;
 var mid = require('../middleware/index');
 
 // Return auth user
@@ -45,10 +45,10 @@ router.post('/', function (req, res, next) {
                 err.status(400);
                 return next(err);
             } else {
-                res.status(201);
-                req.session.userId = user._id;
                 // set location header to '/', return no content
+                res.status(201);
                 res.location('/');
+                req.session.userId = user._id;
                 return res.json(user);
             }
         });

@@ -5,14 +5,22 @@ var express = require('express');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 var userRoutes = require('./routes/users');
 var courseRoutes = require('./routes/courses');
 
-var User = require('./models/User');
-var Course = require('./models/Course');
-var Review = require('./models/Review');
+var User = require('./models/User').User;
+var Course = require('./models/Course').Course;
+var Review = require('./models/Review').Review;
 
 var app = express();
+
+// use sessions for tracking logins
+app.use(session({
+  secret: 'this is a secret',
+  resave: true,
+  saveUninitialized: false
+}));
 
 // parse incoming requests
 app.use(bodyParser.json());
@@ -57,6 +65,7 @@ app.use(function (req, res, next) {
 
 // Express's global error handler
 app.use(function (err, req, res, next) {
+  console.error(err.stack);
   res.status(err.status || 500);
   res.send({
     message: err.message,
