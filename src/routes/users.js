@@ -29,15 +29,7 @@ router.post('/', function (req, res, next) {
         // schema's 'create' method to insert document into Mongo
         User.create(userData, function (error, user) {
             if (error) {
-                if (error.name === "MongoError" && error.code === 11000) {
-                    var err = new Error(`User already exists with that email. 
-                    Please enter a unique email.`);
-                    err.status = 400;
-                    return next(err);
-                }
-                var err = new Error('Please enter a valid email.');
-                err.status = 400;
-                return next(err);
+                return next(error);
             } else {
                 // set location header to '/', return no content
                 res.status(201);

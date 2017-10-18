@@ -8,7 +8,8 @@ var Schema = mongoose.Schema;
 var UserSchema = new Schema({
     fullName: { type: String, required: [true, 'Full name is required.'] },
     emailAddress: {
-        type: String, required: true, unique: true,
+        type: String, required: [true, 'Email is required.'], 
+        unique: [true, 'This email is already registered.'],
         validate: {
             validator: function (value) {
                 // check for correct email format
