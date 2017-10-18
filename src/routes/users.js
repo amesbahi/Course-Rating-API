@@ -3,20 +3,8 @@ var router = express.Router();
 var User = require('../models/User').User;
 var Course = require('../models/Course').Course;
 var Review = require('../models/Review').Review;
+var session = require('express-session');
 var mid = require('../middleware/index');
-
-// Return auth user
-router.get('/', mid.userAuth, function (req, res, next) {
-    User.findById(req.session.userId)
-        .exec(function (error, user) {
-            if (error) {
-                return next(error)
-            } else {
-                res.status(200);
-                return res.json(user);
-            }
-        });
-});
 
 // Create user
 router.post('/', function (req, res, next) {
@@ -41,8 +29,14 @@ router.post('/', function (req, res, next) {
         // schema's 'create' method to insert document into Mongo
         User.create(userData, function (error, user) {
             if (error) {
-                var err = new Error('Issue creating user - please try again.');
-                err.status(400);
+                if (error.name === "MongoError" && error.code === 11000) {
+                    var err = new Error(`User already exists with that email. 
+                    Please enter a unique email.`);
+                    err.status = 400;
+                    return next(err);
+                }
+                var err = new Error('Please enter a valid email.');
+                err.status = 400;
                 return next(err);
             } else {
                 // set location header to '/', return no content
@@ -58,6 +52,19 @@ router.post('/', function (req, res, next) {
         err.status = 400;
         return next(err);
     }
+});
+
+// Return auth user
+router.get('/', mid.userAuth, function (req, res, next) {
+    User.findById(req.session.userId)
+        .exec(function (error, user) {
+            if (error) {
+                return next(error)
+            } else {
+                res.status(200);
+                return res.json(user);
+            }
+        });
 });
 
 module.exports = router;

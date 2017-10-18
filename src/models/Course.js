@@ -11,19 +11,9 @@ var CourseSchema = new Schema({
     estimatedTime: { type: String },
     materialsNeeded: { type: String },
     steps: [
-        {
-            stepNumber: {
-                type: Number
-            },
-            title: {
-                type: String,
-                required: true
-            },
-            description: {
-                type: String,
-                required: true
-            }
-        }
+        { stepNumber: { type: Number } },
+        { title: { type: String, required: true } },
+        { description: { type: String, required: true } }
     ],
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }]
 });
