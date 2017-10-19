@@ -1,7 +1,7 @@
 'use strict'
 
-var auth = require('basic-auth');
-var User = require('../models/User').User;
+const auth = require('basic-auth');
+const User = require('../models/User').User;
 
 function userAuth(req, res, next) {
     req.user = auth(req);
@@ -14,7 +14,7 @@ function userAuth(req, res, next) {
     } else {
         User.authenticate(req.user.name, req.user.pass, function (error, user) {
             if (!user || error) {
-                var err = new Error('Invalid email or password.');
+                let err = new Error('Invalid email or password.');
                 err.status = 401;
                 return next(err);
             } else {

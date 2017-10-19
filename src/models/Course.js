@@ -1,10 +1,10 @@
 'use strict';
 
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-var CourseSchema = new Schema({
+const CourseSchema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: 'User' },
     title: { type: String, required: true },
     description: { type: String, required: true },
@@ -18,6 +18,6 @@ var CourseSchema = new Schema({
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }]
 });
 
-var Course = mongoose.model('Course', CourseSchema);
+const Course = mongoose.model('Course', CourseSchema);
 
 module.exports.Course = Course;

@@ -1,19 +1,19 @@
 'use strict';
 
 // load modules
-var express = require('express');
-var morgan = require('morgan');
-var mongoose = require('mongoose');
-var bodyParser = require('body-parser');
-var session = require('express-session');
-var userRoutes = require('./routes/users');
-var courseRoutes = require('./routes/courses');
+const express = require('express');
+const morgan = require('morgan');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const userRoutes = require('./routes/users');
+const courseRoutes = require('./routes/courses');
 
-var User = require('./models/User').User;
-var Course = require('./models/Course').Course;
-var Review = require('./models/Review').Review;
+const User = require('./models/User').User;
+const Course = require('./models/Course').Course;
+const Review = require('./models/Review').Review;
 
-var app = express();
+const app = express();
 
 // use sessions for tracking logins
 app.use(session({
@@ -58,7 +58,7 @@ app.use('/api/courses', courseRoutes);
 
 // catch 404 and forward to global error handler
 app.use(function (req, res, next) {
-  var err = new Error('File Not Found');
+  let err = new Error('File Not Found');
   err.status = 404;
   next(err);
 });
@@ -74,6 +74,6 @@ app.use(function (err, req, res, next) {
 });
 
 // start listening on our port
-var server = app.listen(app.get('port'), function () {
+const server = app.listen(app.get('port'), function () {
   console.log('Express server is listening on port ' + server.address().port);
 });

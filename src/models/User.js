@@ -1,14 +1,14 @@
 'use strict';
 
-var mongoose = require('mongoose');
-var bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-var UserSchema = new Schema({
+const UserSchema = new Schema({
     fullName: { type: String, required: [true, 'Full name is required.'] },
     emailAddress: {
-        type: String, required: [true, 'Email is required.'], 
+        type: String, required: [true, 'Email is required.'],
         unique: [true, 'This email is already registered.'],
         validate: {
             validator: function (value) {
@@ -28,7 +28,7 @@ UserSchema.statics.authenticate = function (email, password, callback) {
             if (err) {
                 return callback(err);
             } else if (!user) {
-                var error = new Error('User not found');
+                let error = new Error('User not found');
                 error.status = 401;
                 return callback(error);
             }
@@ -44,7 +44,7 @@ UserSchema.statics.authenticate = function (email, password, callback) {
 
 // hash password before saving to database
 UserSchema.pre('save', function (next) {
-    var user = this;
+    let user = this;
     bcrypt.hash(user.password, 10, function (err, hash) {
         if (err) {
             return next(err);

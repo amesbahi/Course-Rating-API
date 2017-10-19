@@ -1,9 +1,9 @@
-var express = require('express');
-var router = express.Router();
-var User = require('../models/User').User;
-var Course = require('../models/Course').Course;
-var Review = require('../models/Review').Review;
-var mid = require('../middleware/index');
+const express = require('express');
+const router = express.Router();
+const User = require('../models/User').User;
+const Course = require('../models/Course').Course;
+const Review = require('../models/Review').Review;
+const mid = require('../middleware/index');
 
 // Get courses
 router.get('/', function (req, res, next) {
@@ -35,7 +35,7 @@ router.get('/:courseId', function (req, res, next) {
 
 // Create a course
 router.post('/', mid.userAuth, function (req, res, next) {
-    var course = new Course(req.body);
+    let course = new Course(req.body);
     course.save(function (err, course) {
         if (err) {
             res.status(400);

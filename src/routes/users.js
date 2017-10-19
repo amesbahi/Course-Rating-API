@@ -1,10 +1,10 @@
-var express = require('express');
-var router = express.Router();
-var User = require('../models/User').User;
-var Course = require('../models/Course').Course;
-var Review = require('../models/Review').Review;
-var session = require('express-session');
-var mid = require('../middleware/index');
+const express = require('express');
+const router = express.Router();
+const User = require('../models/User').User;
+const Course = require('../models/Course').Course;
+const Review = require('../models/Review').Review;
+const session = require('express-session');
+const mid = require('../middleware/index');
 
 // Create user
 router.post('/', function (req, res, next) {
@@ -21,7 +21,7 @@ router.post('/', function (req, res, next) {
         }
 
         // object with form input
-        var userData = {
+        let userData = {
             fullName: req.body.fullName,
             emailAddress: req.body.emailAddress,
             password: req.body.password
@@ -31,7 +31,7 @@ router.post('/', function (req, res, next) {
         User.findOne({ emailAddress: req.body.emailAddress })
             .exec(function (error, user) {
                 if (user) {
-                    var err = new Error("User already exists.");
+                    let err = new Error("User already exists.");
                     err.status = 400;
                     return next(err);
                 } else {
@@ -49,7 +49,7 @@ router.post('/', function (req, res, next) {
                 }
             });
     } else {
-        var err = new Error('All fields required.');
+        let err = new Error('All fields required.');
         err.status = 400;
         return next(err);
     }
