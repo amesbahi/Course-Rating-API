@@ -8,6 +8,7 @@ var mid = require('../middleware/index');
 
 // Create user
 router.post('/', function (req, res, next) {
+
     if (req.body.fullName &&
         req.body.emailAddress &&
         req.body.password &&
@@ -26,19 +27,27 @@ router.post('/', function (req, res, next) {
             password: req.body.password
         };
 
-        // schema's 'create' method to insert document into Mongo
-        User.create(userData, function (error, user) {
-            if (error) {
-                return next(error);
-            } else {
-                // set location header to '/', return no content
-                res.status(201);
-                res.location('/');
-                req.session.userId = user._id;
-                return res.json(user);
-            }
-        });
-
+        // check to see if user exists
+        User.findOne({ emailAddress: req.body.emailAddress })
+            .exec(function (error, user) {
+                if (user) {
+                    var err = new Error("User already exists.");
+                    err.status = 400;
+                    return next(err);
+                } else {
+                    // schema's 'create' method to insert document into Mongo
+                    User.create(userData, function (error, user) {
+                        if (error) {
+                            return next(error);
+                        } else {
+                            // set location header to '/', return no content
+                            res.location('/');
+                            req.session.userId = user._id;
+                            res.status(201).json();
+                        }
+                    });
+                }
+            });
     } else {
         var err = new Error('All fields required.');
         err.status = 400;

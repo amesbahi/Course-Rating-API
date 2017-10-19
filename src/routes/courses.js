@@ -7,20 +7,20 @@ var mid = require('../middleware/index');
 
 // Get courses
 router.get('/', function (req, res, next) {
-    Course.find({})
+    Course.find({}, '_id title')
         .exec(function (error, courses) {
             if (error) {
                 return next(error);
             } else {
                 res.status(200);
-                return res.json({ id: courses._id, title: courses.title });
+                return res.json(courses);
             }
         });
 });
 
 // Get course by id
 router.get('/:courseId', function (req, res, next) {
-    Course.findById(courseId)
+    Course.findById(req.params.courseId)
         .populate('user')
         .populate('reviews')
         .exec(function (error, course) {
@@ -43,22 +43,21 @@ router.post('/', mid.userAuth, function (req, res, next) {
         } else {
             // set location header to '/', return no content
             res.location('/');
-            res.status(201);
-            return res.json(course);
+            res.status(201).json();
         }
     });
 });
 
 // Update a course
-router.put('/courses/:courseId', mid.userAuth, function (req, res, next) {
-    req.course.update(req.body, function (err, result) {
-        if (err) {
-            res.status(400);
-            return next(err);
-        }
-        res.status(204);
-        return res.json(result);
-    });
+router.put('/:courseId', mid.userAuth, function (req, res, next) {
+    Course.findByIdAndUpdate(req.body._id, req.body, { upsert: true })
+        .exec(function (err, course) {
+            if (err) {
+                res.status(400);
+                return next(err);
+            }
+            res.status(204).json();
+        });
 });
 
 // Create a review for a specific course
