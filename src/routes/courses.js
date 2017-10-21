@@ -62,16 +62,28 @@ router.put('/:courseId', mid.userAuth, function (req, res, next) {
 
 // Create a review for a specific course
 router.post('/:courseId/reviews', mid.userAuth, function (req, res, next) {
-    req.course.reviews.push(req.body);
-    req.course.save(function (err, course) {
-        if (err) {
-            res.status(400);
-            return next(err);
-        }
-        res.location('/:courseId');
-        res.status(201);
-        res.json(course);
-    });
+    let reviewBody = {
+        user: req.user._id,
+        rating: req.body.rating,
+        review: req.body.review
+    }
+
+    Review.create(reviewBody, function (err, review) {
+        if (err) return next(err);
+        Course.findByIdAndUpdate(req.params.courseId, reviewBody, function (err, course) {
+            if (err) return next(err);
+            course.reviews.push(review);
+            course.save(function (err, savedCourse) {
+                if (err) {
+                    res.status(400);
+                    return next(err);
+                }
+                res.location('/' + req.params.courseId);
+                res.status(201);
+                res.json(savedCourse);
+            });
+        })
+    })
 });
 
 module.exports = router;
