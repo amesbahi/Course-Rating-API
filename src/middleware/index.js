@@ -10,7 +10,8 @@ function userAuth(req, res, next) {
             name: 'none',
             pass: 'none'
         };
-        next();
+        let err = new Error("User is not authenticated.");
+        next(err);
     } else {
         User.authenticate(req.user.name, req.user.pass, function (error, user) {
             if (!user || error) {
